@@ -190,6 +190,34 @@ class Adafruit_FONA : public FONAStreamType {
   boolean sendCheckReply(FONAFlashStringPtr send, FONAFlashStringPtr reply, uint16_t timeout = FONA_DEFAULT_TIMEOUT_MS);
   boolean sendCheckReply(char* send, FONAFlashStringPtr reply, uint16_t timeout = FONA_DEFAULT_TIMEOUT_MS);
 
+  // consolidate tokenization & parsing behavior
+  struct GPS_info
+  {
+    const static char DELIMITER[];
+
+    char* latp;
+    char* longp;
+
+    static char* getToken() { return strtok(NULL, DELIMITER); }
+    static char* getFirstToken(char* gpsbuffer)
+    { return strtok(gpsbuffer, DELIMITER); }
+
+    bool tokenize808v2(char* gpsbuffer);
+
+    void parseLatLong(float* lat, float* lon);
+  };
+
+
+  struct GPS_info_dir : GPS_info
+  {
+    char* latdir;
+    char* longdir;
+
+    bool tokenize808v1(char* gpsbuffer);
+    bool tokenize5320(char* gpsbuffer);
+
+    void parseLatLong(float* lat, float* lon);
+  };
 
  protected:
   int8_t _rstpin;
