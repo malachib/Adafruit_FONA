@@ -842,6 +842,66 @@ uint8_t Adafruit_FONA::getGPS(uint8_t arg, char *buffer, uint8_t maxbuff) {
   return len;
 }
 
+boolean Adafruit_FONA::getGPS_new(float *lat, float *lon, float *speed_kph, float *heading, float *altitude) {
+  char gpsbuffer[120];
+
+  // we need at least a 2D fix
+  if (GPSstatus() < 2)
+    return false;
+
+  // grab the mode 2^5 gps csv from the sim808
+  uint8_t res_len = getGPS(32, gpsbuffer, 120);
+
+  // make sure we have a response
+  if (res_len == 0)
+    return false;
+
+  switch(_type) {
+    case FONA3G_A:
+    case FONA3G_E:  {
+      // Parse 3G respose
+      // +CGPSINFO:4043.000000,N,07400.000000,W,151015,203802.1,-12.0,0.0,0
+      // skip beginning
+      GPS_info_dir gps_info;
+
+      return gps_info.parse5320(gpsbuffer, lat, lon, speed_kph, heading, altitude);
+    }
+
+    case FONA808_V2:  {
+      // Parse 808 V2 response.  See table 2-3 from here for format:
+      // http://www.adafruit.com/datasheets/SIM800%20Series_GNSS_Application%20Note%20V1.00.pdf
+      GPS_info gps_info;
+
+      return gps_info.parse808v2(gpsbuffer, lat, lon, speed_kph, heading, altitude);
+    }
+
+    default:  {
+      // Parse 808 V1 response.
+      GPS_info_dir gps_info;
+
+      if(!gps_info.parse808v1(gpsbuffer, lat, lon, speed_kph, heading))
+        return false;
+
+      // no need to continue
+      if (altitude == NULL)
+        return true;
+
+      // we need at least a 3D fix for altitude
+      if (GPSstatus() < 3)
+        return false;
+
+      // grab the mode 0 gps csv from the sim808
+      res_len = getGPS(0, gpsbuffer, 120);
+
+      // make sure we have a response
+      if (res_len == 0)
+        return false;
+
+      return gps_info.parse808v1_altitude(gpsbuffer, altitude);
+    }
+  }
+}
+
 boolean Adafruit_FONA::getGPS(float *lat, float *lon, float *speed_kph, float *heading, float *altitude) {
 
   char gpsbuffer[120];
@@ -938,9 +998,6 @@ boolean Adafruit_FONA::getGPS(float *lat, float *lon, float *speed_kph, float *h
   } else if (_type == FONA808_V2) {
     // Parse 808 V2 response.  See table 2-3 from here for format:
     // http://www.adafruit.com/datasheets/SIM800%20Series_GNSS_Application%20Note%20V1.00.pdf
-    GPS_info gps_info;
-
-    gps_info.tokenize808v2(gpsbuffer);
 
     // skip GPS run status
     char *tok = strtok(gpsbuffer, ",");

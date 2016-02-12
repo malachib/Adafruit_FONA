@@ -140,6 +140,7 @@ class Adafruit_FONA : public FONAStreamType {
   int8_t GPSstatus(void);
   uint8_t getGPS(uint8_t arg, char *buffer, uint8_t maxbuff);
   boolean getGPS(float *lat, float *lon, float *speed_kph=0, float *heading=0, float *altitude=0);
+  boolean getGPS_new(float *lat, float *lon, float *speed_kph=0, float *heading=0, float *altitude=0);
   boolean enableGPSNMEA(uint8_t nmea);
 
   // TCP raw connections
@@ -199,12 +200,19 @@ class Adafruit_FONA : public FONAStreamType {
     char* longp;
 
     static char* getToken() { return strtok(NULL, DELIMITER); }
+    static char* getToken(char*& token) { token = getToken(); return token; }
     static char* getFirstToken(char* gpsbuffer)
     { return strtok(gpsbuffer, DELIMITER); }
 
+    // Seems doing things this way could result in improper values if one
+    // decides to skip tokens
+    static bool getTokenAndParseLegacy(float* value);
+    static bool getTokenAndParse(float* value);
+
     bool tokenize808v2(char* gpsbuffer);
 
-    void parseLatLong(float* lat, float* lon);
+    inline void parseLatLong(float* lat, float* lon);
+    bool parse808v2(char* gpsbuffer, float *lat, float *lon, float *speed_kph, float *heading, float *altitude);
   };
 
 
@@ -217,6 +225,10 @@ class Adafruit_FONA : public FONAStreamType {
     bool tokenize5320(char* gpsbuffer);
 
     void parseLatLong(float* lat, float* lon);
+
+    bool parse5320(char* gpsbuffer, float *lat, float *lon, float *speed_kph, float *heading, float *altitude);
+    bool parse808v1(char* gpsbuffer, float *lat, float *lon, float *speed_kph, float *heading);
+    bool parse808v1_altitude(char* gpsbuffer, float* altitude);
   };
 
  protected:
