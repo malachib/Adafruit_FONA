@@ -68,6 +68,7 @@
 #define FONA_SLEEPMODE_AWAKE 0
 // can still receive paging/SMS but serial port is shut down
 // To wake up: Pull DTR pin low or "receive a voice or data call"
+// be advised: not all boards break out the DTR pin!
 #define FONA_SLEEPMODE_SLEEP 1
 // can still receive paging/SMS and serial port will auto-wake
 // but first character user -> FONA will be lost
