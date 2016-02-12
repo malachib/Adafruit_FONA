@@ -64,6 +64,15 @@
 #define FONA_CALL_RINGING 3
 #define FONA_CALL_INPROGRESS 4
 
+// full operation mode
+#define FONA_SLEEPMODE_AWAKE 0
+// can still receive paging/SMS but serial port is shut down
+// To wake up: Pull DTR pin low or "receive a voice or data call"
+#define FONA_SLEEPMODE_SLEEP 1
+// can still receive paging/SMS and serial port will auto-wake
+// but first character user -> FONA will be lost
+#define FONA_SLEEPMODE_STANDBY 2
+
 class Adafruit_FONA : public FONAStreamType {
  public:
   Adafruit_FONA(int8_t r);
@@ -88,6 +97,9 @@ class Adafruit_FONA : public FONAStreamType {
   boolean getADCVoltage(uint16_t *v);
   boolean getBattPercent(uint16_t *p);
   boolean getBattVoltage(uint16_t *v);
+
+  // sleep functions (generally use DTR to wake up)
+  bool setSleepMode(uint8_t sleep);
 
   // SIM query
   uint8_t unlockSIM(char *pin);

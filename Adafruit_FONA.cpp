@@ -180,6 +180,20 @@ boolean Adafruit_FONA::getADCVoltage(uint16_t *v) {
   return sendParseReply(F("AT+CADC?"), F("+CADC: 1,"), v);
 }
 
+
+/********* Sleep *********************************************************/
+
+boolean Adafruit_FONA::setSleepMode(uint8_t mode) {
+  // see http://microchip.ua/simcom/SIM800x/SIM800H/SIM800H&SIM800L_Hardware_Design_V2.02.pdf
+  // pg . 27.
+  // see https://s3.amazonaws.com/design-files.tessel.io/Datasheets/SIM900_HArdware_Design_v2.04.pdf
+  // pg . 21
+  char sendbuff[11] = "AT+CSCLK=";
+  sendbuff[9] = mode + '0';
+  // FIX: haven't tested this yet
+  return sendCheckReply(sendbuff, ok_reply);
+}
+
 /********* SIM ***********************************************************/
 
 uint8_t Adafruit_FONA::unlockSIM(char *pin)
