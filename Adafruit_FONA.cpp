@@ -19,9 +19,6 @@
 #include "Adafruit_FONA.h"
 
 
-const char Adafruit_FONA::GPS_info::DELIMITER[] = ",";
-
-
 Adafruit_FONA::Adafruit_FONA(int8_t rst)
 {
   _rstpin = rst;

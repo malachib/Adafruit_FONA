@@ -1,6 +1,10 @@
 #include "Adafruit_FONA.h"
 
 
+const char Adafruit_FONA::GPS_info::DELIMITER[] = ",";
+
+
+
 inline bool Adafruit_FONA::GPS_info::getTokenAndParseLegacy(float* value)
 {
   if(value)
