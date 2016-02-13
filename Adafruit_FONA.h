@@ -74,6 +74,30 @@
 // but first character user -> FONA will be lost
 #define FONA_SLEEPMODE_STANDBY 2
 
+class ISIMCOM_Driver
+{
+public:
+  class Context
+  {
+
+  };
+
+  virtual bool getGPS(
+    Context* context,
+    float* lat,
+    float* lon,
+    float* speed_kph = 0,
+    float* heading = 0,
+    float* alt = 0) = 0;
+
+  virtual uint8_t getGPSStatus(Context* context) = 0;
+};
+
+class SIMCOM_808v1_Driver : public ISIMCOM_Driver {};
+class SIMCOM_808v2_Driver : public ISIMCOM_Driver {};
+class SIMCOM_5320_Driver : public ISIMCOM_Driver {};
+
+
 class Adafruit_FONA : public FONAStreamType {
  public:
   Adafruit_FONA(int8_t r);
