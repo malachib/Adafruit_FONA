@@ -63,8 +63,8 @@ bool Adafruit_FONA::GPS_info::tokenize808v2(char* gpsbuffer)
   // skip GPS run status
   if (! getFirstToken(gpsbuffer)) return false;
 
-  // skip fix status
-  if (! getToken()) return false;
+  // grab fix status for any external interested parties
+  if (! getToken(fixStatus)) return false;
 
   // skip date
   if (! getToken()) return false;

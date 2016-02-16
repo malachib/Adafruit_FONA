@@ -233,6 +233,7 @@ class Adafruit_FONA : public FONAStreamType {
   {
     const static char DELIMITER[];
 
+    char* fixStatus;
     char* latp;
     char* longp;
 
@@ -250,6 +251,8 @@ class Adafruit_FONA : public FONAStreamType {
 
     inline void parseLatLong(float* lat, float* lon);
     bool parse808v2(char* gpsbuffer, float *lat, float *lon, float *speed_kph, float *heading, float *altitude);
+    uint8_t parseFixStatus() { return atoi(fixStatus); }
+    bool hasLock808v2() { return fixStatus[0] == '1'; }
   };
 
 
