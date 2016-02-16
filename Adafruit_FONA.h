@@ -177,7 +177,7 @@ class Adafruit_FONA : public FONAStreamType {
   int8_t GPSstatus(void);
   uint8_t getGPS(uint8_t arg, char *buffer, uint8_t maxbuff);
   boolean getGPS(float *lat, float *lon, float *speed_kph=0, float *heading=0, float *altitude=0);
-  boolean getGPS_new(float *lat, float *lon, float *speed_kph=0, float *heading=0, float *altitude=0);
+  boolean getGPS_new(double *lat, double *lon, double *speed_kph=0, double *heading=0, double *altitude=0);
   boolean enableGPSNMEA(uint8_t nmea);
 
   // TCP raw connections
@@ -244,13 +244,13 @@ class Adafruit_FONA : public FONAStreamType {
 
     // Seems doing things this way could result in improper values if one
     // decides to skip tokens
-    static bool getTokenAndParseLegacy(float* value);
-    static bool getTokenAndParse(float* value);
+    static bool getTokenAndParseLegacy(double* value);
+    static bool getTokenAndParse(double* value);
 
     bool tokenize808v2(char* gpsbuffer);
 
-    inline void parseLatLong(float* lat, float* lon);
-    bool parse808v2(char* gpsbuffer, float *lat, float *lon, float *speed_kph, float *heading, float *altitude);
+    inline void parseLatLong(double* lat, double* lon);
+    bool parse808v2(char* gpsbuffer, double *lat, double *lon, double *speed_kph, double *heading, double *altitude);
     uint8_t parseFixStatus() { return atoi(fixStatus); }
     bool hasLock808v2() { return fixStatus[0] == '1'; }
   };
@@ -264,11 +264,11 @@ class Adafruit_FONA : public FONAStreamType {
     bool tokenize808v1(char* gpsbuffer);
     bool tokenize5320(char* gpsbuffer);
 
-    void parseLatLong(float* lat, float* lon);
+    void parseLatLong(double* lat, double* lon);
 
-    bool parse5320(char* gpsbuffer, float *lat, float *lon, float *speed_kph, float *heading, float *altitude);
-    bool parse808v1(char* gpsbuffer, float *lat, float *lon, float *speed_kph, float *heading);
-    bool parse808v1_altitude(char* gpsbuffer, float* altitude);
+    bool parse5320(char* gpsbuffer, double *lat, double *lon, double *speed_kph, double *heading, double *altitude);
+    bool parse808v1(char* gpsbuffer, double *lat, double *lon, double *speed_kph, double *heading);
+    bool parse808v1_altitude(char* gpsbuffer, double* altitude);
   };
 
  protected:
@@ -318,6 +318,15 @@ class Adafruit_FONA : public FONAStreamType {
 
   FONAStreamType *mySerial;
 };
+
+class Adafruit_FONA_808v2 : public Adafruit_FONA {
+public:
+  Adafruit_FONA_808v2 (int8_t r) : Adafruit_FONA(r) { _type = FONA808_V2; }
+
+protected:
+  bool getGPS(double* lat, double* lon, double* speed_kph=0, double* heading=0, double* altitude=0);
+};
+
 
 class Adafruit_FONA_3G : public Adafruit_FONA {
 

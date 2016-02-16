@@ -5,7 +5,7 @@ const char Adafruit_FONA::GPS_info::DELIMITER[] = ",";
 
 
 
-inline bool Adafruit_FONA::GPS_info::getTokenAndParseLegacy(float* value)
+inline bool Adafruit_FONA::GPS_info::getTokenAndParseLegacy(double* value)
 {
   if(value)
   {
@@ -17,7 +17,7 @@ inline bool Adafruit_FONA::GPS_info::getTokenAndParseLegacy(float* value)
   return true;
 }
 
-inline bool Adafruit_FONA::GPS_info::getTokenAndParse(float* value)
+inline bool Adafruit_FONA::GPS_info::getTokenAndParse(double* value)
 {
   char* tok = getToken();
   if(!tok)  return false;
@@ -81,7 +81,7 @@ bool Adafruit_FONA::GPS_info::tokenize808v2(char* gpsbuffer)
 }
 
 
-inline void Adafruit_FONA::GPS_info::parseLatLong(float* lat, float* lon)
+inline void Adafruit_FONA::GPS_info::parseLatLong(double* lat, double* lon)
 {
   *lat = atof(latp);
   *lon = atof(longp);
@@ -110,13 +110,13 @@ bool Adafruit_FONA::GPS_info_dir::tokenize5320(char* gpsbuffer)
 }
 
 
-void Adafruit_FONA::GPS_info_dir::parseLatLong(float* lat, float* lon)
+void Adafruit_FONA::GPS_info_dir::parseLatLong(double* lat, double* lon)
 {
   double latitude = atof(latp);
   double longitude = atof(longp);
 
   // convert latitude from minutes to decimal
-  float degrees = floor(latitude / 100);
+  double degrees = floor(latitude / 100);
   double minutes = latitude - (100 * degrees);
   minutes /= 60;
   degrees += minutes;
@@ -138,7 +138,7 @@ void Adafruit_FONA::GPS_info_dir::parseLatLong(float* lat, float* lon)
   *lon = degrees;
 }
 
-bool Adafruit_FONA::GPS_info_dir::parse808v1(char* gpsbuffer, float *lat, float *lon, float *speed_kph, float *heading)
+bool Adafruit_FONA::GPS_info_dir::parse808v1(char* gpsbuffer, double *lat, double *lon, double *speed_kph, double *heading)
 {
   if(!tokenize808v1(gpsbuffer)) return false;
 
@@ -157,7 +157,7 @@ bool Adafruit_FONA::GPS_info_dir::parse808v1(char* gpsbuffer, float *lat, float 
 }
 
 
-bool Adafruit_FONA::GPS_info_dir::parse808v1_altitude(char* gpsbuffer, float* altitude)
+bool Adafruit_FONA::GPS_info_dir::parse808v1_altitude(char* gpsbuffer, double* altitude)
 {
   if(!getFirstToken(gpsbuffer)) return false; // skip mode
   if(!getToken()) return false; // skip lat
@@ -168,7 +168,7 @@ bool Adafruit_FONA::GPS_info_dir::parse808v1_altitude(char* gpsbuffer, float* al
   return true;
 }
 
-bool Adafruit_FONA::GPS_info::parse808v2(char* gpsbuffer, float *lat, float *lon, float *speed_kph, float *heading, float *altitude)
+bool Adafruit_FONA::GPS_info::parse808v2(char* gpsbuffer, double *lat, double *lon, double *speed_kph, double *heading, double *altitude)
 {
   if(!tokenize808v2(gpsbuffer)) return false;
 
@@ -181,7 +181,7 @@ bool Adafruit_FONA::GPS_info::parse808v2(char* gpsbuffer, float *lat, float *lon
   return true;
 }
 
-bool Adafruit_FONA::GPS_info_dir::parse5320(char* gpsbuffer, float *lat, float *lon, float *speed_kph, float *heading, float *altitude)
+bool Adafruit_FONA::GPS_info_dir::parse5320(char* gpsbuffer, double *lat, double *lon, double *speed_kph, double *heading, double *altitude)
 {
   if(!tokenize5320(gpsbuffer)) return false;
 

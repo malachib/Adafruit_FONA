@@ -855,7 +855,7 @@ uint8_t Adafruit_FONA::getGPS(uint8_t arg, char *buffer, uint8_t maxbuff) {
   return len;
 }
 
-boolean Adafruit_FONA::getGPS_new(float *lat, float *lon, float *speed_kph, float *heading, float *altitude) {
+boolean Adafruit_FONA::getGPS_new(double *lat, double *lon, double *speed_kph, double *heading, double *altitude) {
   char gpsbuffer[120];
 
   // we need at least a 2D fix
