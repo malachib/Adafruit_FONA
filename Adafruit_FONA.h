@@ -271,6 +271,12 @@ class Adafruit_FONA : public FONAStreamType {
     bool parse808v1_altitude(char* gpsbuffer, double* altitude);
   };
 
+  // FIX: unexpected compiler behavior, leaning on this hack for now
+  uint8_t getGPS_helper(uint8_t arg, char* buffer, uint8_t len)
+  {
+    return getGPS(arg, buffer, len);
+  }
+
  protected:
   int8_t _rstpin;
   uint8_t _type;
@@ -322,6 +328,16 @@ class Adafruit_FONA : public FONAStreamType {
 class Adafruit_FONA_808v2 : public Adafruit_FONA {
 public:
   Adafruit_FONA_808v2 (int8_t r) : Adafruit_FONA(r) { _type = FONA808_V2; }
+
+protected:
+  bool getGPS(double* lat, double* lon, double* speed_kph=0, double* heading=0, double* altitude=0);
+};
+
+
+class Adafruit_FONA_800 : public Adafruit_FONA {
+public:
+  // auto-detect since this is nearly the same for 800L, 800H and 808v1
+  Adafruit_FONA_800 (int8_t r) : Adafruit_FONA(r) { }
 
 protected:
   bool getGPS(double* lat, double* lon, double* speed_kph=0, double* heading=0, double* altitude=0);
