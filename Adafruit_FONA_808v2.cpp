@@ -13,9 +13,9 @@ IDriver::MetaData SIM808_GNSS_raw::getMetaData()
   return md;
 }
 
-bool SIM808_GNSS_raw::getGNSS(void* context, GNSS_raw_ext* data)
+bool SIM808_GNSS_raw::getGNSS(IGNSS_raw_token_callback callback, void* context)
 {
-  auto ctx = (Context*) context;
+  //auto ctx = (Context*) context;
 
   return false;
 }
@@ -36,10 +36,10 @@ bool Adafruit_FONA::getGNSS(
   double* altitude)
 {
   SIM808_GNSS_raw gnssRaw;
-  GNSS_raw_ext data;
-  void* context = alloca(gnssRaw.getContextSize());
-  gnssRaw.initContext(context);
-  gnssRaw.getGNSS(context, &data);
+  //GNSS_raw_ext data;
+  //void* context = alloca(gnssRaw.getContextSize());
+  //gnssRaw.initContext(context);
+  //gnssRaw.getGNSS(context, &data);
 }
 
 

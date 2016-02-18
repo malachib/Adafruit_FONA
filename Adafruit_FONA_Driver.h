@@ -6,6 +6,8 @@ class SIM808_GNSS_raw : public IGNSS_raw
     Adafruit_FONA* fona;
   };
 public:
+  SIM808_GNSS_raw(...) {}
+  
   VIRTUAL MetaData getMetaData() OVERRIDE;
 
   VIRTUAL uint16_t getContextSize() OVERRIDE
@@ -13,7 +15,7 @@ public:
     return sizeof(Context);
   }
 
-  VIRTUAL bool getGNSS(void* context, GNSS_raw_ext* data) OVERRIDE;
+  VIRTUAL bool getGNSS(IGNSS_raw_token_callback callback, void* context) OVERRIDE;
 };
 
 

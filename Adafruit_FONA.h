@@ -23,7 +23,7 @@
 #ifdef DRIVERS
 #include "driver/gnss.h"
 
-using namespace driver::gnss;
+using namespace driver;
 
 #else
 #define VIRTUAL
@@ -226,9 +226,6 @@ class Adafruit_FONA : public FONAStreamType
 
   // consolidate tokenization & parsing behavior
   struct GPS_info
-#if DRIVERS
-  : public GNSS_raw_ext
-#endif
   {
     const static char DELIMITER[];
 
