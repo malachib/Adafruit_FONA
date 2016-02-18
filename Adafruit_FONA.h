@@ -22,6 +22,9 @@
 #include "includes/platform/FONAPlatform.h"
 #ifdef DRIVERS
 #include "driver/gnss.h"
+
+using namespace driver::gnss;
+
 #else
 #define VIRTUAL
 #define ABSTRACT
