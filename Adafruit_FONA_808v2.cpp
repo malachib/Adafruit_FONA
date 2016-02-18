@@ -1,5 +1,22 @@
 #include "Adafruit_FONA.h"
 
+#ifdef DRIVERS
+IDriver::MetaData Adafruit_FONA::getMetaData()
+{
+  MetaData md;
+  return md;
+}
+
+bool Adafruit_FONA::getGNSS(
+  double* lat,
+  double* lon,
+  double* speed_kph,
+  double* heading,
+  double* altitude)
+{
+}
+#endif
+
 bool Adafruit_FONA_808v2::getGPS(
   double* lat,
   double* lon,

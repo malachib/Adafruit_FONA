@@ -20,8 +20,13 @@
 #include "includes/FONAConfig.h"
 #include "includes/FONAExtIncludes.h"
 #include "includes/platform/FONAPlatform.h"
-
-
+#ifdef DRIVERS
+#include "driver/gnss.h"
+#else
+#define VIRTUAL
+#define ABSTRACT
+#define OVERRIDE
+#endif
 
 #define FONA800L 1
 #define FONA800H 6
@@ -74,31 +79,11 @@
 // but first character user -> FONA will be lost
 #define FONA_SLEEPMODE_STANDBY 2
 
-class ISIMCOM_Driver
-{
-public:
-  class Context
-  {
-
-  };
-
-  virtual bool getGPS(
-    Context* context,
-    float* lat,
-    float* lon,
-    float* speed_kph = 0,
-    float* heading = 0,
-    float* alt = 0) = 0;
-
-  virtual uint8_t getGPSStatus(Context* context) = 0;
-};
-
-class SIMCOM_808v1_Driver : public ISIMCOM_Driver {};
-class SIMCOM_808v2_Driver : public ISIMCOM_Driver {};
-class SIMCOM_5320_Driver : public ISIMCOM_Driver {};
-
-
-class Adafruit_FONA : public FONAStreamType {
+class Adafruit_FONA : public FONAStreamType
+#ifdef DRIVERS
+  , IGNSS
+#endif
+ {
  public:
   Adafruit_FONA(int8_t r);
   boolean begin(FONAStreamType &port);
@@ -110,6 +95,14 @@ class Adafruit_FONA : public FONAStreamType {
   int read(void);
   int peek(void);
   void flush();
+
+#ifdef DRIVERS
+  VIRTUAL MetaData getMetaData() OVERRIDE;
+  VIRTUAL bool getGNSS(double* latitude, double* longitude,
+    double* speed_kph = NULL,
+    double* heading = NULL,
+    double* altitude = NULL) OVERRIDE;
+#endif
 
   // FONA 3G requirements
   boolean setBaudrate(uint16_t baud);
@@ -230,6 +223,9 @@ class Adafruit_FONA : public FONAStreamType {
 
   // consolidate tokenization & parsing behavior
   struct GPS_info
+#if DRIVERS
+  : public GNSS_raw_ext
+#endif
   {
     const static char DELIMITER[];
 
