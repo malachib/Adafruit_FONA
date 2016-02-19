@@ -41,12 +41,9 @@ bool SIM808_GNSS_raw::getGNSS(IGNSS_raw_token_callback callback, void* context)
 
   for(int i = 0; i < (sizeof(sequence) / sizeof(GnssFields)); i++)
   {
-    // If there's trouble parsing the token, abort
-    while(!tokenizer.parse());
-
     // destructively write to original buffer , cuz I know it's safe
     // in this context - we'll be overwriting the comma
-    char* token = tokenizer.getBufferDestructive();
+    char* token = tokenizer.parseTokenDestructive();
 
     // callback can abort the call early.  This is not an error, but rather
     // the consumer telling us we don't need to process anything further
