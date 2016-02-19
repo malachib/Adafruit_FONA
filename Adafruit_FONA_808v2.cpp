@@ -42,16 +42,14 @@ bool SIM808_GNSS_raw::getGNSS(IGNSS_raw_token_callback callback, void* context)
   for(int i = 0; i < (sizeof(sequence) / sizeof(GnssFields)); i++)
   {
     // destructively write to original buffer , cuz I know it's safe
-    // in this context - we'll be overwriting the comma
+    // in this context - we'll be overwriting the comma.  Also
+    // this call auto-advances forward
     char* token = tokenizer.parseTokenDestructive();
 
     // callback can abort the call early.  This is not an error, but rather
     // the consumer telling us we don't need to process anything further
     if(!callback(sequence[i], token, context))
       break;
-
-    // move just past the token found
-    tokenizer.advance();
   }
 
   // lifted straight from original FONA code
