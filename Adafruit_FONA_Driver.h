@@ -15,12 +15,7 @@ class SIM808_GNSS_raw : public IGNSS_raw
     Adafruit_FONA* fona;
   };
 public:
-  SIM808_GNSS_raw(...)
-  {
-    va_list args;
-    fona = va_arg(args, Adafruit_FONA*);
-  }
-  //SIM808_GNSS_raw(Adafruit_FONA* fona) { this->fona = fona; }
+  SIM808_GNSS_raw(Adafruit_FONA* fona, ...) : fona(fona) {}
 
   VIRTUAL MetaData getMetaData() OVERRIDE;
 
@@ -39,7 +34,7 @@ public:
 
 
 class SIM808_GNSS_raw_Factory :
-  public IInstanceFactoryImpl<IGNSS_raw, SIM808_GNSS_raw>
+  public IInstanceFactoryImpl<IGNSS_raw, SIM808_GNSS_raw, Adafruit_FONA*>
 {
 };
 
