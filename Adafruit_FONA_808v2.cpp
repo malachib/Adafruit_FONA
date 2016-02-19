@@ -16,7 +16,7 @@ IDriver::MetaData SIM808_GNSS_raw::getMetaData()
 
 bool SIM808_GNSS_raw::getGNSS(token_callback callback, void* context)
 {
-  static const GnssFields //PROGMEM
+  static const GnssFields PROGMEM
   sequence[] =
   {
     GNSS_STATUS_RUN,
@@ -50,8 +50,8 @@ bool SIM808_GNSS_raw::getGNSS(token_callback callback, void* context)
     // this call auto-advances forward
     char* token = tokenizer.parseTokenDestructive();
 
-    //GnssFields field = (GnssFields) pgm_read_byte(&sequence[i]);
-    GnssFields field = sequence[i];
+    GnssFields field = (GnssFields) pgm_read_byte(&sequence[i]);
+    //GnssFields field = sequence[i];
 
     // callback can abort the call early.  This is not an error, but rather
     // the consumer telling us we don't need to process anything further
