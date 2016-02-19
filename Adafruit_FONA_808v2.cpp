@@ -14,6 +14,19 @@ IDriver::MetaData SIM808_GNSS_raw::getMetaData()
   return md;
 }
 
+const __FlashStringHelper* IGNSS_raw::getFieldString(GnssFields field)
+{
+  switch(field)
+  {
+    case GNSS_LATITUDE: return F("latitude");
+    case GNSS_LONGITUDE: return F("longitude");
+    case GNSS_STATUS_FIX: return F("status fix");
+    case GNSS_ALTITUDE: return F("altitude");
+    case GNSS_TIMESTAMP: return F("timestamp");
+    defaut: return F("unknown");
+  }
+}
+
 bool SIM808_GNSS_raw::getGNSS(token_callback callback, void* context)
 {
   static const GnssFields //PROGMEM

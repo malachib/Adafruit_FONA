@@ -21,7 +21,7 @@ public:
     return sizeof(Context);
   }
 
-  VIRTUAL bool getGNSS(token_callback callback, void* context) OVERRIDE;
+  VIRTUAL bool getGNSS(token_callback callback, void* context = NULL) OVERRIDE;
 };
 
 
