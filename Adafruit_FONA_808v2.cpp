@@ -14,9 +14,10 @@ IDriver::MetaData SIM808_GNSS_raw::getMetaData()
   return md;
 }
 
-bool SIM808_GNSS_raw::getGNSS(IGNSS_raw_token_callback callback, void* context)
+bool SIM808_GNSS_raw::getGNSS(token_callback callback, void* context)
 {
-  static const GnssFields sequence[] =
+  static const GnssFields //PROGMEM 
+  sequence[] =
   {
     GNSS_STATUS_RUN,
     GNSS_STATUS_FIX,
@@ -28,7 +29,12 @@ bool SIM808_GNSS_raw::getGNSS(IGNSS_raw_token_callback callback, void* context)
     GNSS_HEADING
   };
 
+  // FIX: the mySerial->available() call kills this, but that's unexpected
+  // because calling GPS status from above works ... ahh unless fona is a NULL
+  // ref!
   fona->getReply(F("AT+CGNSINF"));
+
+  fona->readline();
 
   // lifted & adapted from original FONA code
   char *p = prog_char_strstr(fona->replybuffer, (prog_char*)F("SINF"));
@@ -46,9 +52,12 @@ bool SIM808_GNSS_raw::getGNSS(IGNSS_raw_token_callback callback, void* context)
     // this call auto-advances forward
     char* token = tokenizer.parseTokenDestructive();
 
+    //GnssFields field = (GnssFields) pgm_read_byte(&sequence[i]);
+    GnssFields field = sequence[i];
+
     // callback can abort the call early.  This is not an error, but rather
     // the consumer telling us we don't need to process anything further
-    if(!callback(sequence[i], token, context))
+    if(!callback(field, token, context))
       break;
   }
 

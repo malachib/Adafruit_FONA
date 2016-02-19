@@ -4,7 +4,7 @@ class SIM808_GNSS_raw : public IGNSS_raw
 
   struct Context
   {
-    char buffer[120];
+    //char buffer[120];
     Adafruit_FONA* fona;
   };
 public:
@@ -13,6 +13,7 @@ public:
     va_list args;
     fona = va_arg(args, Adafruit_FONA*);
   }
+  //SIM808_GNSS_raw(Adafruit_FONA* fona) { this->fona = fona; }
 
   VIRTUAL MetaData getMetaData() OVERRIDE;
 
@@ -21,7 +22,10 @@ public:
     return sizeof(Context);
   }
 
-  VIRTUAL bool getGNSS(IGNSS_raw_token_callback callback, void* context) OVERRIDE;
+  VIRTUAL bool getGNSS(token_callback callback, void* context) OVERRIDE;
+
+  // FIX: kludge call until we fully get constructor working right
+  void setFONA(Adafruit_FONA* fona) { this->fona = fona; }
 };
 
 
