@@ -32,12 +32,12 @@ bool SIM808_GNSS_raw::getGNSS(token_callback callback, void* context)
   // FIX: the mySerial->available() call kills this, but that's unexpected
   // because calling GPS status from above works ... ahh unless fona is a NULL
   // ref!
-  fona->getReply(F("AT+CGNSINF"));
+  fona.getReply(F("AT+CGNSINF"));
 
-  fona->readline();
+  fona.readline();
 
   // lifted & adapted from original FONA code
-  char *p = prog_char_strstr(fona->replybuffer, (prog_char*)F("SINF"));
+  char *p = prog_char_strstr(fona.replybuffer, (prog_char*)F("SINF"));
   if (p == 0) return false;
 
   p+=6;
@@ -62,7 +62,7 @@ bool SIM808_GNSS_raw::getGNSS(token_callback callback, void* context)
   }
 
   // lifted straight from original FONA code
-  fona->readline(); // eat 'OK'
+  fona.readline(); // eat 'OK'
 
   return true;
 }
