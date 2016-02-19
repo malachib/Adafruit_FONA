@@ -81,7 +81,7 @@ bool Adafruit_FONA::getGNSS(
   double* heading,
   double* altitude)
 {
-  SIM808_GNSS_raw gnssRaw;
+  //SIM808_GNSS_raw gnssRaw;
   //GNSS_raw_ext data;
   //void* context = alloca(gnssRaw.getContextSize());
   //gnssRaw.initContext(context);
