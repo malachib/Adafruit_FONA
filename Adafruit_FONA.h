@@ -25,6 +25,8 @@
 
 using namespace driver;
 
+class SIM808_GNSS_raw;
+
 #else
 #define VIRTUAL
 #define ABSTRACT
@@ -87,6 +89,10 @@ class Adafruit_FONA : public FONAStreamType
   , IGNSS
 #endif
  {
+#ifdef DRIVERS
+  // FIX: kludge for now to get at all the juicy protected functions
+  friend SIM808_GNSS_raw;
+#endif
  public:
   Adafruit_FONA(int8_t r);
   boolean begin(FONAStreamType &port);

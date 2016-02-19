@@ -3,6 +3,7 @@
 #ifdef DRIVERS
 #include "alloca.h"
 #include "Adafruit_FONA_Driver.h"
+#include "Tokenizer.h"
 
 IDriver::MetaData SIM808_GNSS_raw::getMetaData()
 {
@@ -15,9 +16,51 @@ IDriver::MetaData SIM808_GNSS_raw::getMetaData()
 
 bool SIM808_GNSS_raw::getGNSS(IGNSS_raw_token_callback callback, void* context)
 {
-  //auto ctx = (Context*) context;
+  static const GnssFields sequence[] =
+  {
+    GNSS_STATUS_RUN,
+    GNSS_STATUS_FIX,
+    GNSS_TIMESTAMP,
+    GNSS_LATITUDE,
+    GNSS_LONGITUDE,
+    GNSS_ALTITUDE,
+    GNSS_SPEED,
+    GNSS_HEADING
+  };
 
-  return false;
+  fona->getReply(F("AT+CGNSINF"));
+
+  // lifted & adapted from original FONA code
+  char *p = prog_char_strstr(fona->replybuffer, (prog_char*)F("SINF"));
+  if (p == 0) return false;
+
+  p+=6;
+
+  // do parsing here
+  TokenizerInPlace tokenizer(p, ",");
+
+  for(int i = 0; i < (sizeof(sequence) / sizeof(GnssFields)); i++)
+  {
+    // If there's trouble parsing the token, abort
+    while(!tokenizer.parse());
+
+    // destructively write to original buffer , cuz I know it's safe
+    // in this context - we'll be overwriting the comma
+    char* token = tokenizer.getBufferDestructive();
+
+    // callback can abort the call early.  This is not an error, but rather
+    // the consumer telling us we don't need to process anything further
+    if(!callback(sequence[i], token, context))
+      break;
+
+    // move just past the token found
+    tokenizer.advance();
+  }
+
+  // lifted straight from original FONA code
+  fona->readline(); // eat 'OK'
+
+  return true;
 }
 
 SIM808_GNSS_raw_Factory   SIM808_GNSS_Factory;
