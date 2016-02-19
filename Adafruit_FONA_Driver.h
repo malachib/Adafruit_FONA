@@ -1,3 +1,10 @@
+#pragma once
+
+#include <driver/gnss.h>
+#include "Adafruit_FONA.h"
+
+using namespace driver;
+
 class SIM808_GNSS_raw : public IGNSS_raw
 {
   Adafruit_FONA* fona;

@@ -1,6 +1,6 @@
 #include "Adafruit_FONA.h"
 
-#ifdef DRIVERS
+//#ifndef _DRIVERS
 #include "alloca.h"
 #include "Adafruit_FONA_Driver.h"
 #include "Tokenizer.h"
@@ -16,7 +16,7 @@ IDriver::MetaData SIM808_GNSS_raw::getMetaData()
 
 bool SIM808_GNSS_raw::getGNSS(token_callback callback, void* context)
 {
-  static const GnssFields //PROGMEM 
+  static const GnssFields //PROGMEM
   sequence[] =
   {
     GNSS_STATUS_RUN,
@@ -69,6 +69,7 @@ bool SIM808_GNSS_raw::getGNSS(token_callback callback, void* context)
 
 SIM808_GNSS_raw_Factory   SIM808_GNSS_Factory;
 
+#ifdef DRIVERS
 IDriver::MetaData Adafruit_FONA::getMetaData()
 {
   MetaData md;

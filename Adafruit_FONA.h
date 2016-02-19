@@ -20,18 +20,19 @@
 #include "includes/FONAConfig.h"
 #include "includes/FONAExtIncludes.h"
 #include "includes/platform/FONAPlatform.h"
-#ifdef DRIVERS
 #include "driver/gnss.h"
 
+#ifdef DRIVERS
 using namespace driver;
 
-class SIM808_GNSS_raw;
 
 #else
-#define VIRTUAL
-#define ABSTRACT
-#define OVERRIDE
+//#define VIRTUAL
+//#define ABSTRACT
+//#define OVERRIDE
 #endif
+
+class SIM808_GNSS_raw;
 
 #define FONA800L 1
 #define FONA800H 6
@@ -89,10 +90,9 @@ class Adafruit_FONA : public FONAStreamType
   , IGNSS
 #endif
  {
-#ifdef DRIVERS
   // FIX: kludge for now to get at all the juicy protected functions
   friend SIM808_GNSS_raw;
-#endif
+
  public:
   Adafruit_FONA(int8_t r);
   boolean begin(FONAStreamType &port);
