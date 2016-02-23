@@ -190,8 +190,12 @@ boolean Adafruit_FONA::setSleepMode(uint8_t mode) {
   // pg . 21
   // see https://forums.adafruit.com/viewtopic.php?f=54&t=76289&hilit=+fona+sleep+dtr
   // note the suggestion there that SIM808v1 doesn't support mode 2
-  char sendbuff[11] = "AT+CSCLK=";
+  // my SIM808v2 doesn't support mode 2 either
+  char sendbuff[11];
+
+  strcpy_P(sendbuff, PSTR("AT+CSCLK="));
   sendbuff[9] = mode + '0';
+  sendbuff[10] = 0;
   // FIX: haven't tested this yet
   return sendCheckReply(sendbuff, ok_reply);
 }
