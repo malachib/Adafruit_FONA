@@ -85,6 +85,10 @@ class SIM808_GNSS_raw;
 // but first character user -> FONA will be lost
 #define FONA_SLEEPMODE_STANDBY 2
 
+#define SIM808_CMD_ATT      "AT+"
+// Set TCP to Use SSL Function
+#define SIM808_CMD_TCPSSL   "CIPSSL"
+
 class Adafruit_FONA : public FONAStreamType
 #ifdef DRIVERS
   , IGNSS
@@ -189,6 +193,7 @@ class Adafruit_FONA : public FONAStreamType
   boolean TCPsend(char *packet, uint8_t len);
   uint16_t TCPavailable(void);
   uint16_t TCPread(uint8_t *buff, uint8_t len);
+  boolean TCPssl(boolean onoff); // still untested
 
   // HTTP low level interface (maps directly to SIM800 commands).
   boolean HTTP_init();
