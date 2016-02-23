@@ -609,7 +609,7 @@ boolean Adafruit_FONA::sendSMS(char *smsaddr, char *smsmsg) {
   readline(1000); // read OK
   //DEBUG_PRINT("* "); DEBUG_PRINTLN(replybuffer);
 
-  if (strcmp_P(replybuffer, PSTR("OK")) != 0) {
+  if (prog_char_strcmp(replybuffer, PSTR("OK")) != 0) {
     return false;
   }
 
@@ -719,7 +719,7 @@ boolean Adafruit_FONA::enableNTPTimeSync(boolean onoff, FONAFlashStringPtr ntpse
 
 boolean Adafruit_FONA::getTime(char *buff, uint16_t maxlen) {
   getReply(F("AT+CCLK?"), (uint16_t) 10000);
-  if (strncmp_P(replybuffer, PSTR("+CCLK: "), 7) != 0)
+  if (prog_char_strncmp(replybuffer, PSTR("+CCLK: "), 7) != 0)
     return false;
 
   char *p = replybuffer+7;
@@ -1459,7 +1459,7 @@ boolean Adafruit_FONA::TCPconnected(void) {
 
   DEBUG_PRINT (F("\t<--- ")); DEBUG_PRINTLN(replybuffer);
 
-  return (strcmp_P(replybuffer, PSTR("STATE: CONNECT OK")) == 0);
+  return (prog_char_strcmp(replybuffer, PSTR("STATE: CONNECT OK")) == 0);
 }
 
 boolean Adafruit_FONA::TCPsend(char *packet, uint8_t len) {
