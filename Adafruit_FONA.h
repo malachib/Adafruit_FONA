@@ -83,7 +83,7 @@ class SIM808_GNSS_raw;
 
 class Adafruit_FONA : public FONAStreamType
 #ifdef DRIVERS
-  , IGNSS
+  , public IGNSS
 #endif
  {
   // FIX: kludge for now to get at all the juicy protected functions
