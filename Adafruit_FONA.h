@@ -20,16 +20,12 @@
 #include "includes/FONAConfig.h"
 #include "includes/FONAExtIncludes.h"
 #include "includes/platform/FONAPlatform.h"
-#include "driver/gnss.h"
 
 #ifdef DRIVERS
+#include "driver/gnss.h"
+
 using namespace driver;
-
-
 #else
-//#define VIRTUAL
-//#define ABSTRACT
-//#define OVERRIDE
 #endif
 
 class SIM808_GNSS_raw;
