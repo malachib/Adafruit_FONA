@@ -1451,6 +1451,11 @@ uint16_t Adafruit_FONA::TCPread(uint8_t *buff, uint8_t len) {
 }
 
 
+boolean Adafruit_FONA::TCPssl(boolean onoff) {
+  return sendCheckReply(F("AT+CIPSSL="), onoff ? 1 : 0, ok_reply);
+}
+
+
 
 /********* HTTP LOW LEVEL FUNCTIONS  ************************************/
 
