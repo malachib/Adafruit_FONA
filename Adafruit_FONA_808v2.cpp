@@ -43,7 +43,7 @@ bool SIM808_GNSS_raw::getGNSS(token_callback callback, void* context)
   // do parsing here
   TokenizerInPlace tokenizer(p, ",");
 
-  for(int i = 0; i < (sizeof(sequence) / sizeof(GnssFields)); i++)
+  for(uint8_t i = 0; i < (sizeof(sequence) / sizeof(GnssFields)); i++)
   {
     // destructively write to original buffer , cuz I know it's safe
     // in this context - we'll be overwriting the comma.  Also
@@ -86,6 +86,7 @@ bool Adafruit_FONA::getGNSS(
   //void* context = alloca(gnssRaw.getContextSize());
   //gnssRaw.initContext(context);
   //gnssRaw.getGNSS(context, &data);
+  return false;
 }
 
 
