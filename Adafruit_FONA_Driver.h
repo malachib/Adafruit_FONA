@@ -3,6 +3,9 @@
 #include <driver/gnss.h>
 #include "Adafruit_FONA.h"
 
+#define FACT_VE defined(DRIVER_FEATURE_VTABLE)
+#include <fact/virtual_def.h>
+
 using namespace driver;
 
 class SIM808_GNSS_raw : public IGNSS_raw
@@ -33,3 +36,5 @@ class SIM808_GNSS_raw_Factory :
 };
 
 extern  SIM808_GNSS_raw_Factory   SIM808_GNSS_Factory;
+
+#include <fact/virtual_undef.h>
